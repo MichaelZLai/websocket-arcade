@@ -1,0 +1,8 @@
+*{
+  text-align: center;
+  background-color: #F7E7C7;
+}
+.board{
+  display:flex;
+  justify-content: center;
+}

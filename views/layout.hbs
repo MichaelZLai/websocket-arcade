@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="/css/styles.css" media="screen" title="no title">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      window.onload = function(){
+        var inputs = document.querySelectorAll("input");
+        for(var x = inputs.length - 1; x >= 0; x--){
+          inputs[x].addEventListener("keyup", function(){
+            socket.emit("move", [this.id, this.value]);
+          });
+        }
+
+        document.getElementById("reset").addEventListener("click", function(){
+          socket.emit("reset");
+        });
+
+        socket.on("update", function(newData){
+          document.getElementById(newData[0]).value = newData[1];
+        });
+
+        socket.on("reset", function(){
+          for(var x = inputs.length - 1; x >= 0; x--){
+            inputs[x].value = "";
+          }
+        });
+
+      };
+    </script>
+  </head>
+  <body>
+
+    <h1>Tic Tac Toe</h1>
+
+    <div class="board">
+      <table>
+        {{#each rows}}
+        <tr>
+          <td><input id="x0_y{{_id}}" value="{{space0}}" /></td>
+          <td><input id="x1_y{{_id}}" value="{{space1}}" /></td>
+          <td><input id="x2_y{{_id}}" value="{{space2}}" /></td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+    <button id="reset">Reset</button>
+
+  </body>
+</html>
